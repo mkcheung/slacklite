@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Service;
 
+use AppBundle\Entity\Role;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +33,10 @@ class RoleService
 
     public function createRole(Request $request)
     {
-
-
+        //TODO: Place some validation here to verify everything needed
+        $requestParameters = $request->request->all();
+        $role = new Role($requestParameters['role_type']);
+        $this->em->persist($role);
+        $this->em->flush();
     }
 }

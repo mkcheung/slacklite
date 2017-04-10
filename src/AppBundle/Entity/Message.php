@@ -20,11 +20,11 @@ class Message {
 
     /**
      * @ORM\Id()
-     * @ORM\Column(name="message_id", type = "integer")
+     * @ORM\Column(name="message_id", type = "integer", nullable=false)
      * @ORM\GeneratedValue(strategy = "AUTO")
-     * @var int
+     * @var integer
      */
-    protected $id;
+    protected $message_id;
 
     /**
      * @var string

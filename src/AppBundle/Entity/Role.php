@@ -18,11 +18,11 @@ class Role {
 
     /**
      * @ORM\Id()
-     * @ORM\Column(name="role_id", type = "integer")
+     * @ORM\Column(name="role_id", type = "integer", nullable=false)
      * @ORM\GeneratedValue(strategy = "AUTO")
-     * @var int
+     * @var integer
      */
-    protected $id;
+    protected $role_id;
 
     /**
      * @ORM\Column (type = "string", length = 255)

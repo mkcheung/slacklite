@@ -20,8 +20,11 @@ class RoleController extends Controller
      */
     public function indexAction()
     {
+        $roleServices = $this->get('app.role_service');
+        $roles = $roleServices->getRoles();
         return $this->render('role/index.html.twig', array(
-            'title' => 'Roles'
+            'title' => 'Roles',
+            'roles' => $roles
         ));
     }
 
@@ -31,9 +34,13 @@ class RoleController extends Controller
     public function createRoleAction(Request $request)
     {
 
-        $roleServices = $this->get('app.role_service');
-//
-//        $roles = $roleServices->getRoles();
+        if ($request->isMethod('POST')) {
+            $roleServices = $this->get('app.role_service');
+            $roleServices->createRole($request);
+
+            $this->redirect('/roles');
+        }
+
         return $this->render('role/create_user.html.twig', array(
             'title' => 'Create Roles'
         ));
