@@ -12,6 +12,7 @@ use AppBundle\Forms\Users\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -29,25 +30,10 @@ class UserController extends Controller
     public function createAction(Request $request)
     {
 
-        if ($request->isMethod('POST')) {
-            $userServices = $this->get('app.user_service');
-            $userServices->createUser($request);
+        $roleServices = $this->get('app.user_service');
+        $roleServices->createUser($request);
 
-            $this->redirect('/users');
-        }
-
-        $roleServices = $this->get('app.role_service');
-        $roles        = $roleServices->getRoles();
-
-        $form = $this->createForm(UserType::class, $roles, [
-            'action' => $this->generateUrl('user_create'),
-            'method' => 'POST',
-        ])->createView();
-
-        return $this->render('AppBundle:User:create_user.html.twig', [
-            'title' => 'Create User',
-            'form'  => $form,
-        ]);
+        return new Response('User created!');
     }
 
 }

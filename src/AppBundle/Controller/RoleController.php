@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
 {
@@ -28,16 +29,10 @@ class RoleController extends Controller
     public function createAction(Request $request)
     {
 
-        if ($request->isMethod('POST')) {
-            $roleServices = $this->get('app.role_service');
-            $roleServices->createRole($request);
+        $roleServices = $this->get('app.role_service');
+        $roleServices->createRole($request);
 
-            $this->redirectToRoute($this->generateUrl('role_index'));
-        }
-
-        return $this->render('AppBundle:Role:create_role.html.twig', array(
-            'title' => 'Create Roles'
-        ));
+        return new Response('Role created!');
     }
 
 }

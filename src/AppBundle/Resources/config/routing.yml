@@ -8,10 +8,15 @@ user_index:
 user_create:
     path: /users/create
     defaults: { _controller: AppBundle:User:create}
+    methods: [POST]
 
 role_index:
     path: /roles/
     defaults: { _controller: AppBundle:Role:index}
+#role_create:
+#    path: /roles/create
+#    defaults: { _controller: AppBundle:Role:create}
 role_create:
     path: /roles/create
     defaults: { _controller: AppBundle:Role:create}
+    methods: [POST]

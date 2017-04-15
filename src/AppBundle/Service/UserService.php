@@ -37,15 +37,12 @@ class UserService
 
     public function createUser(Request $request)
     {
-        //TODO: Place some validation here to verify everything needed
-        $requestParameters = $request->request->all();
 
-        $role = $this->roleRepo->findOneBy(['role_id' => $requestParameters['role']]);
+        $userData = json_decode($request->getContent(), true);
+        $role = $this->roleRepo->findOneBy(['role_id' => $userData['role']]);
 
-        $user              = new MessageUser($requestParameters['username'],
-            password_hash($requestParameters['password'], PASSWORD_DEFAULT), $role);
-
-        $this->em->persist($user);
+        $role = new MessageUser($userData['username'], password_hash($userData['password'], PASSWORD_DEFAULT), $role);
+        $this->em->persist($role);
         $this->em->flush();
     }
 }

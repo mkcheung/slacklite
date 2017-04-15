@@ -35,13 +35,10 @@ class RoleService
 
     public function createRole(Request $request)
     {
-        //TODO: Place some validation here to verify everything needed
-        $requestParameters = $request->request->all();
-        $role              = new Role($requestParameters['role_type']);
 
-
+        $roleData = json_decode($request->getContent(), true);
+        $role = new Role($roleData['type']);
         $this->em->persist($role);
         $this->em->flush();
-
     }
 }
