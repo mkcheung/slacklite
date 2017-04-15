@@ -4,8 +4,10 @@ namespace AppBundle\Service;
 use AppBundle\Entity\Role;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Mockery\CountValidator\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Created by PhpStorm.
  * User: marscheung
@@ -22,21 +24,24 @@ class RoleService
         EntityManager $entityManager,
         EntityRepository $entityRepository
     ) {
-        $this->em = $entityManager;
+        $this->em       = $entityManager;
         $this->roleRepo = $entityRepository;
     }
 
     public function getRoles()
     {
-       return $this->roleRepo->findAll();
+        return $this->roleRepo->findAll();
     }
 
     public function createRole(Request $request)
     {
         //TODO: Place some validation here to verify everything needed
         $requestParameters = $request->request->all();
-        $role = new Role($requestParameters['role_type']);
+        $role              = new Role($requestParameters['role_type']);
+
+
         $this->em->persist($role);
         $this->em->flush();
+
     }
 }

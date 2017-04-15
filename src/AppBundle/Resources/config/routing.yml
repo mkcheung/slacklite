@@ -1,0 +1,17 @@
+homepage:
+    path: /
+    defaults: { _controller: AppBundle:Default:index}
+
+user_index:
+    path: /users/
+    defaults: { _controller: AppBundle:User:index}
+user_create:
+    path: /users/create
+    defaults: { _controller: AppBundle:User:create}
+
+role_index:
+    path: /roles/
+    defaults: { _controller: AppBundle:Role:index}
+role_create:
+    path: /roles/create
+    defaults: { _controller: AppBundle:Role:create}

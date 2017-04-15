@@ -15,33 +15,27 @@ use Symfony\Component\HttpFoundation\Request;
 class RoleController extends Controller
 {
 
-    /**
-     * @Route("/roles")
-     */
     public function indexAction()
     {
         $roleServices = $this->get('app.role_service');
         $roles = $roleServices->getRoles();
-        return $this->render('role/index.html.twig', array(
+        return $this->render('AppBundle:Role:role_index.html.twig', array(
             'title' => 'Roles',
             'roles' => $roles
         ));
     }
 
-    /**
-     * @Route("/roles/create")
-     */
-    public function createRoleAction(Request $request)
+    public function createAction(Request $request)
     {
 
         if ($request->isMethod('POST')) {
             $roleServices = $this->get('app.role_service');
             $roleServices->createRole($request);
 
-            $this->redirect('/roles');
+            $this->redirectToRoute($this->generateUrl('role_index'));
         }
 
-        return $this->render('role/create_user.html.twig', array(
+        return $this->render('AppBundle:Role:create_role.html.twig', array(
             'title' => 'Create Roles'
         ));
     }

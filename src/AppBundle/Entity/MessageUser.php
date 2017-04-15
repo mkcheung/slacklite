@@ -20,8 +20,8 @@ class MessageUser {
 
     /**
      * @ORM\Id()
-     * @ORM\Column(name="user_id", type = "integer", nullable=false)
-     * @ORM\GeneratedValue(strategy = "AUTO")
+     * @ORM\Column(name="user_id", type = "integer")
+     * @ORM\GeneratedValue(strategy = "IDENTITY")
      * @var integer
      */
     protected $user_id;
@@ -40,13 +40,13 @@ class MessageUser {
 
 
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(name="createdAt", type="datetime", nullable=false)
      */
     protected $createdAt;
 
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(name="modifiedAt", type="datetime", nullable=false)
      */
     protected $modifiedAt;

@@ -18,8 +18,8 @@ class Role {
 
     /**
      * @ORM\Id()
-     * @ORM\Column(name="role_id", type = "integer", nullable=false)
-     * @ORM\GeneratedValue(strategy = "AUTO")
+     * @ORM\Column(name="role_id", type = "integer")
+     * @ORM\GeneratedValue(strategy = "IDENTITY")
      * @var integer
      */
     protected $role_id;
@@ -30,13 +30,13 @@ class Role {
      */
     protected $type;
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(name="createdAt", type="datetime", nullable=false)
      */
     protected $createdAt;
 
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(name="modifiedAt", type="datetime", nullable=false)
      */
     protected $modifiedAt;
@@ -73,7 +73,7 @@ class Role {
     }
 
     public function getId() {
-        return $this->id;
+        return $this->role_id;
     }
 
     /**

@@ -1,0 +1,30 @@
+{% extends 'AppBundle::general_setup.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h1>
+            Manage Users:
+        </h1>
+        <div class="row">
+            <div class="col">
+                <h3>
+                </h3>
+                All Users:
+                <ul>
+                    {% for user in users %}
+                        <li>{{ user.username }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col">
+                <h3>
+                    Navigator:
+                </h3>
+                <a href="/">Back To Index</a></br>
+                <a href="/users/create">Create User:</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,7 +1,25 @@
 services:
+    repository.role:
+        class: Doctrine\Orm\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Role
+    repository.user:
+        class: Doctrine\Orm\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\MessageUser
+    repository.message:
+        class: Doctrine\Orm\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Message
     app.role_service:
         class: AppBundle\Service\RoleService
-        arguments: ['@doctrine.orm.entity_manager',"@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Role')"]
+        arguments: ['@doctrine.orm.entity_manager', "@repository.role"]
+    app.user_service:
+        class: AppBundle\Service\UserService
+        arguments: ['@doctrine.orm.entity_manager', "@repository.user", "@repository.role"]
     #service_name:
     #    class: AppBundle\Directory\ClassName
     #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']

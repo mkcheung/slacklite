@@ -20,8 +20,8 @@ class Message {
 
     /**
      * @ORM\Id()
-     * @ORM\Column(name="message_id", type = "integer", nullable=false)
-     * @ORM\GeneratedValue(strategy = "AUTO")
+     * @ORM\Column(name="message_id", type = "integer")
+     * @ORM\GeneratedValue(strategy = "IDENTITY")
      * @var integer
      */
     protected $message_id;
@@ -33,27 +33,27 @@ class Message {
     protected $message;
 
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(name="createdAt", type="datetime", nullable=false)
      */
     protected $createdAt;
 
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(name="modifiedAt", type="datetime", nullable=false)
      */
     protected $modifiedAt;
 
 
     /**
-     * @var user
+     * @var MessageUser
      * @ORM\ManyToOne(targetEntity="MessageUser")
      * @ORM\JoinColumn(name="created_by_id", referencedColumnName="user_id")
      */
     protected $createdBy;
 
     /**
-     * @var user
+     * @var MessageUser
      * @ORM\ManyToOne(targetEntity="MessageUser", inversedBy="messages")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      */
