@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Created by PhpStorm.
@@ -22,12 +23,10 @@ class UserService
 
     public function __construct(
         EntityManager $entityManager,
-        EntityRepository $userRepository,
-        EntityRepository $roleRepository
+        EntityRepository $userRepository
     ) {
         $this->em       = $entityManager;
         $this->userRepo = $userRepository;
-        $this->roleRepo = $roleRepository;
     }
 
     public function getUsers()
@@ -39,10 +38,16 @@ class UserService
     {
 
         $userData = json_decode($request->getContent(), true);
-        $role = $this->roleRepo->findOneBy(['role_id' => $userData['role']]);
 
-        $role = new MessageUser($userData['username'], password_hash($userData['password'], PASSWORD_DEFAULT), $role);
-        $this->em->persist($role);
+        $user = new MessageUser();
+
+        $user->setUsername($userData['username']);
+        $user->setFirstName($userData['firstName']);
+        $user->setEmail($userData['email']);
+        $user->setLastName($userData['lastName']);
+        $user->setPassword($userData['password']);
+        $this->em->persist($user);
         $this->em->flush();
+        return $user;
     }
 }

@@ -9,6 +9,7 @@
 
 namespace AppBundle\Entity;
 
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\DateTimeType;
@@ -16,7 +17,7 @@ use Doctrine\DBAL\Types\DateTimeType;
  * @ORM\Entity
  * @ORM\Table(name="message_user")
  */
-class MessageUser {
+class MessageUser extends BaseUser{
 
     /**
      * @ORM\Id()
@@ -24,20 +25,19 @@ class MessageUser {
      * @ORM\GeneratedValue(strategy = "IDENTITY")
      * @var integer
      */
-    protected $user_id;
+    protected $id;
+
 
     /**
-     * @ORM\Column (type = "string", length = 255)
-     * @var string
+     * @var \string
+     * @ORM\Column(name="firstName", type="string", nullable=false)
      */
-    protected $username;
-
+    protected $firstName;
     /**
-     * @ORM\Column (type = "string", length = 255)
-     * @var string
+     * @var \string
+     * @ORM\Column(name="lastName", type="string", nullable=false)
      */
-    protected $password;
-
+    protected $lastName;
 
     /**
      * @var \DateTime
@@ -57,53 +57,14 @@ class MessageUser {
      */
     protected $sentMessages;
 
-    /**
-     * @var role
-     * @ORM\ManyToOne(targetEntity="Role", inversedBy="users")
-     * @ORM\JoinColumn(name="role_id", referencedColumnName="role_id")
-     */
-    protected $role;
-
-
-    public function __construct($username, $password, $role) {
-
+    public function __construct() {
+        
+        parent::__construct();
         $date = new \DateTime();
-        $this->username = $username;
-        $this->setPassword($password);
-        $this->messages     = new ArrayCollection();
+        // $this->messages     = new ArrayCollection();
         $this->createdAt = $date;
         $this->modifiedAt = $date;
-        $this->role = $role;
         // $orm = $this->getDoctrine()->getManager();
-    }
-
-    /**
-     * @param string $content
-     */
-    public function setPassword($password) {
-        $this->password = password_hash($password, PASSWORD_DEFAULT);
-    }
-    /**
-     * @param string $content
-     */
-    public function getPassword() {
-        return $this->password;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getUserName() {
-        return $this->username;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function setUserName($username) {
-        $this->username = $username;
     }
 
     /**
@@ -113,14 +74,32 @@ class MessageUser {
     public function getId() {
         return $this->id;
     }
-
+    
     /**
      *
-     * @return Role
+     * @return string
      */
-    public function getRole() {
-        return $this->role;
+    public function getFirstName() {
+        return $this->firstName;
     }
+
+    public function setFirstName($firstName) {
+        $this->firstName = $firstName;
+    }
+
+    
+    /**
+     *
+     * @return string
+     */
+    public function getLastName() {
+        return $this->lastName;
+    }
+
+    public function setLastName($lastName) {
+        $this->lastName = $lastName;
+    }
+
 
     /**
      * Set createdAt
@@ -201,16 +180,4 @@ class MessageUser {
         return $this->sentMessages;
     }
 
-    /**
-     * Set role
-     *
-     * @param \AppBundle\Entity\Role $role
-     * @return MessageUser
-     */
-    public function setRole(\AppBundle\Entity\Role $role = null)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
 }

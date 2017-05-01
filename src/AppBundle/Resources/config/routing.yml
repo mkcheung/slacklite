@@ -5,18 +5,13 @@ homepage:
 user_index:
     path: /users/
     defaults: { _controller: AppBundle:User:index}
+    methods: [GET]
 user_create:
     path: /users/create
     defaults: { _controller: AppBundle:User:create}
     methods: [POST]
 
-role_index:
-    path: /roles/
-    defaults: { _controller: AppBundle:Role:index}
-#role_create:
-#    path: /roles/create
-#    defaults: { _controller: AppBundle:Role:create}
-role_create:
-    path: /roles/create
-    defaults: { _controller: AppBundle:Role:create}
+token_create:
+    path: /token/create
+    defaults: { _controller: AppBundle:Token:create}
     methods: [POST]

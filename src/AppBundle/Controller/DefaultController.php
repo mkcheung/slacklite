@@ -11,6 +11,8 @@ class DefaultController extends Controller
 
     public function indexAction(Request $request)
     {
+    	//$this->denyAccessUnlessGranted('ROLE_USER');
+    	// phpinfo();
         // replace this example code with whatever you need
         return $this->render('AppBundle:Default:mainchat.html.twig', array());
         // replace this example code with whatever you need
