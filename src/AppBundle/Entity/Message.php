@@ -54,7 +54,7 @@ class Message {
 
     /**
      * @var MessageUser
-     * @ORM\ManyToOne(targetEntity="MessageUser", inversedBy="messages")
+     * @ORM\ManyToOne(targetEntity="MessageUser", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      */
     protected $user;
