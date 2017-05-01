@@ -59,11 +59,7 @@ class Message {
      */
     protected $user;
 
-    public function __construct($message, $createdBy, $directedToUser='') {
-        $this->message = $message;
-        $this->createdBy = $createdBy;
-        $this->user = (!empty($directedToUser)) ? $directedToUser : null;
-
+    public function __construct($message=null, $createdBy=null, $directedToUser='') {
         $this->createdAt = new \DateTime();
         $this->modifiedAt = new \DateTime();
     }

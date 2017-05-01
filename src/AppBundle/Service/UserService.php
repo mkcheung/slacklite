@@ -19,7 +19,6 @@ class UserService
 
     protected $em;
     protected $userRepo;
-    protected $roleRepo;
 
     public function __construct(
         EntityManager $entityManager,

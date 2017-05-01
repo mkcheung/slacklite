@@ -12,11 +12,14 @@ services:
     app.user_service:
         class: AppBundle\Service\UserService
         arguments: ['@doctrine.orm.entity_manager', "@repository.user"]
+    app.message_service:
+        class: AppBundle\Service\MessageService
+        arguments: ['@doctrine.orm.entity_manager', "@repository.message", "@repository.user"]
+    
     app.form.registration:
         class: AppBundle\Forms\Users\RegistrationFormType
         tags:
             - { name: form.type }
-
     jwt_token_authenticator:
         class: AppBundle\Security\JwtTokenAuthenticator
         autowire: true

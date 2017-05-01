@@ -61,7 +61,7 @@ class MessageUser extends BaseUser{
         
         parent::__construct();
         $date = new \DateTime();
-        // $this->messages     = new ArrayCollection();
+        // $this->sentMessages     = new ArrayCollection();
         $this->createdAt = $date;
         $this->modifiedAt = $date;
         // $orm = $this->getDoctrine()->getManager();
