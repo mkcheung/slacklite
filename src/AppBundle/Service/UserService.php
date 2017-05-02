@@ -44,7 +44,7 @@ class UserService
         $user->setFirstName($userData['firstName']);
         $user->setEmail($userData['email']);
         $user->setLastName($userData['lastName']);
-        $user->setPassword($userData['password']);
+        $user->setPassword(password_hash($userData['password'], PASSWORD_DEFAULT));
         $this->em->persist($user);
         $this->em->flush();
         return $user;
