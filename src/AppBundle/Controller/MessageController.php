@@ -44,6 +44,17 @@ class MessageController extends Controller
         return $response;
     }
 
+    public function getMessagesInChannelAction(Request $request)
+    {
+        $messageServices = $this->get('app.message_service');
+        $response = $messageServices->getChannelMessages($request);
+
+        if(empty($response)){
+            throw $this->createNotFoundException('No messages in channel.');
+        }
+
+        return $response;
+    }
     public function createAction(Request $request)
     {
 

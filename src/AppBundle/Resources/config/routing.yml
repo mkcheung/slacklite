@@ -11,6 +11,10 @@ channel_create:
     path: /channels/create
     defaults: { _controller: AppBundle:Channel:create}
     methods: [POST]
+channel_create:
+    path: /channels/create
+    defaults: { _controller: AppBundle:Channel:create}
+    methods: [POST]
 
 user_index:
     path: /users/
@@ -25,6 +29,10 @@ message_index:
     path: /messages/
     defaults: { _controller: AppBundle:Message:index}
     methods: [GET]
+messages_in_channel:
+    path: /messages/getMessagesInChannel
+    defaults: { _controller: AppBundle:Message:getMessagesInChannel}
+    methods: [POST]
 message_create:
     path: /messages/create
     defaults: { _controller: AppBundle:Message:create}

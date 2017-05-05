@@ -25,7 +25,7 @@ class ChannelController extends Controller
     	foreach($allChannels as $channel) {
     		$data['channels'][] = [
     			'id' => $channel->getId(),
-    			'channelName' => $channel->getName()
+    			'channelName' => $channel->getChannelName()
     		];
     	}
 
