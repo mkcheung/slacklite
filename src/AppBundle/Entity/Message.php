@@ -8,6 +8,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -47,6 +48,13 @@ class Message {
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      */
     protected $messageUser;
+
+    /**
+     * @var Channel
+     * @ORM\ManyToOne(targetEntity="Channel", inversedBy="messages")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="channel_id")
+     */
+    protected $channel;
 
     /**
      * @var ArrayCollection
@@ -137,5 +145,28 @@ class Message {
     public function getUser()
     {
         return $this->messageUser;
+    }
+
+    /**
+     * Set channel
+     *
+     * @param \AppBundle\Entity\Channel $channel
+     * @return Channel
+     */
+    public function setChannel(\AppBundle\Entity\Channel $channel = null)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Get channel
+     *
+     * @return \AppBundle\Entity\Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
     }
 }

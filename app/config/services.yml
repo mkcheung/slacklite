@@ -1,4 +1,9 @@
 services:
+    repository.channel:
+        class: Doctrine\Orm\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Channel
     repository.user:
         class: Doctrine\Orm\EntityRepository
         factory: ['@doctrine.orm.entity_manager', getRepository]
@@ -9,12 +14,15 @@ services:
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments:
             - AppBundle\Entity\Message
+    app.channel_service:
+        class: AppBundle\Service\ChannelService
+        arguments: ['@doctrine.orm.entity_manager', "@repository.channel", "@repository.user"]
     app.user_service:
         class: AppBundle\Service\UserService
         arguments: ['@doctrine.orm.entity_manager', "@repository.user"]
     app.message_service:
         class: AppBundle\Service\MessageService
-        arguments: ['@doctrine.orm.entity_manager', "@repository.message", "@repository.user"]
+        arguments: ['@doctrine.orm.entity_manager', "@repository.message", "@repository.user", "@repository.channel"]
     
     app.form.registration:
         class: AppBundle\Forms\Users\RegistrationFormType

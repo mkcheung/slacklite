@@ -48,6 +48,12 @@ class Channel {
     protected $messageUsers;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="channel")
+     */
+    protected $messages;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="createdAt", type="datetime", nullable=false)
      */
@@ -65,6 +71,7 @@ class Channel {
         
         $date = new \DateTime();
         $this->messageUsers     = new ArrayCollection();
+        $this->messages     = new ArrayCollection();
         $this->createdAt = $date;
         $this->modifiedAt = $date;
         // $orm = $this->getDoctrine()->getManager();

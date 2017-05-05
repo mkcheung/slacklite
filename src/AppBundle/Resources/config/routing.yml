@@ -2,6 +2,16 @@ homepage:
     path: /
     defaults: { _controller: AppBundle:Default:index}
 
+channel_index:
+    path: /channels/
+    defaults: { _controller: AppBundle:Channel:index}
+    methods: [GET]
+
+channel_create:
+    path: /channels/create
+    defaults: { _controller: AppBundle:Channel:create}
+    methods: [POST]
+
 user_index:
     path: /users/
     defaults: { _controller: AppBundle:User:index}

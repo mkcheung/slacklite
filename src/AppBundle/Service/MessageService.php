@@ -2,6 +2,7 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Message;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,15 +20,19 @@ class MessageService
 
     protected $em;
     protected $messageRepo;
+    protected $userRepo;
+    protected $channelRepo;
 
     public function __construct(
         EntityManager $entityManager,
         EntityRepository $messageRepository,
-        EntityRepository $userRepository
+        EntityRepository $userRepository,
+        EntityRepository $channelRepository
     ) {
         $this->em       = $entityManager;
         $this->messageRepo = $messageRepository;
         $this->userRepo = $userRepository;
+        $this->channelRepo = $channelRepository;
     }
 
     public function getMessages()
@@ -41,21 +46,22 @@ class MessageService
         $messageData = json_decode($request->getContent(), true);
 
         $message = new Message();
-        $createdByUser = $this->userRepo->findOneBy(['id' => $messageData['created_by_id']]);
+        $user = $this->userRepo->findOneBy(['user_id' => $messageData['user_id']]);
 
-        if(empty($createdByUser)){
+        if(empty($user)){
             throw new NotFoundHttpException('Sending User does not exist.');
         }
 
-        $sentTo = $this->userRepo->findOneBy(['id' => $messageData['user_id']]);
+        $channel = $this->channelRepo->findOneBy(['channel_id' => $messageData['channel_id']]);
 
-        if(empty($sentTo)){
-            throw new NotFoundHttpException('Recipient User does not exist.');
+        if(empty($channel)){
+            throw new NotFoundHttpException('Message channel does not exist.');
         }
 
         $message->setMessage($messageData['message']);
-        $message->setCreatedBy($createdByUser);
-        $message->setUser($sentTo);
+        $message->setCreatedAt(new \DateTime());
+        $message->setUser($user);
+        $message->setChannel($channel);
         $this->em->persist($message);
         $this->em->flush();
         return $message;
