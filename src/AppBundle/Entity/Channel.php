@@ -9,34 +9,49 @@
 
 namespace AppBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\DateTimeType;
 /**
  * @ORM\Entity
- * @ORM\Table(name="message_user")
+ * @ORM\Table(name="channel")
  */
-class MessageUser extends BaseUser{
+class Channel {
 
     /**
      * @ORM\Id()
-     * @ORM\Column(name="user_id", type = "integer")
+     * @ORM\Column(name="channel_id", type = "integer")
      * @ORM\GeneratedValue(strategy = "IDENTITY")
      * @var integer
      */
-    protected $user_id;
+    protected $channel_id;
+
 
     /**
      * @var \string
-     * @ORM\Column(name="firstName", type="string", nullable=false)
+     * @ORM\Column(name="channelName", type="string", nullable=false)
      */
-    protected $firstName;
+    protected $channelName;
+
     /**
-     * @var \string
-     * @ORM\Column(name="lastName", type="string", nullable=false)
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="MessageUser", inversedBy="channels")
+     * @ORM\JoinTable(name="message_user_channels",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="channel_id", referencedColumnName="channel_id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     *  }
+     * )
      */
-    protected $lastName;
+    protected $messageUsers;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="channel")
+     */
+    protected $messages;
 
     /**
      * @var \DateTime
@@ -50,26 +65,16 @@ class MessageUser extends BaseUser{
      */
     protected $modifiedAt;
 
-    /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Channel", mappedBy="messageUsers")
-     */
-    protected $channels;
 
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Message", mappedBy="messageUser")
-     */
-    protected $sentMessages;
 
     public function __construct() {
         
-        parent::__construct();
         $date = new \DateTime();
-        $this->channels     = new ArrayCollection();
-        $this->sentMessages     = new ArrayCollection();
+        $this->messageUsers     = new ArrayCollection();
+        $this->messages     = new ArrayCollection();
         $this->createdAt = $date;
         $this->modifiedAt = $date;
+        // $orm = $this->getDoctrine()->getManager();
     }
 
     /**
@@ -77,40 +82,26 @@ class MessageUser extends BaseUser{
      * @return int
      */
     public function getId() {
-        return $this->user_id;
+        return $this->channel_id;
     }
     
     /**
      *
      * @return string
      */
-    public function getFirstName() {
-        return $this->firstName;
+    public function getChannelName() {
+        return $this->channelName;
     }
 
-    public function setFirstName($firstName) {
-        $this->firstName = $firstName;
+    public function setChannelName($channelName) {
+        $this->channelName = $channelName;
     }
-
-    
-    /**
-     *
-     * @return string
-     */
-    public function getLastName() {
-        return $this->lastName;
-    }
-
-    public function setLastName($lastName) {
-        $this->lastName = $lastName;
-    }
-
 
     /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return MessageUser
+     * @return Channel
      */
     public function setCreatedAt($createdAt)
     {
@@ -133,7 +124,7 @@ class MessageUser extends BaseUser{
      * Set modifiedAt
      *
      * @param \DateTime $modifiedAt
-     * @return MessageUser
+     * @return Channel
      */
     public function setModifiedAt($modifiedAt)
     {
@@ -153,36 +144,36 @@ class MessageUser extends BaseUser{
     }
 
     /**
-     * Add sentMessages
+     * Add messageUsers
      *
-     * @param \AppBundle\Entity\Message $sentMessages
-     * @return MessageUser
+     * @param \AppBundle\Entity\MessageUser $messageUsers
+     * @return Channel
      */
-    public function addSentMessage(\AppBundle\Entity\Message $sentMessages)
+    public function addMessageUser(\AppBundle\Entity\MessageUser $messageUsers)
     {
-        $this->sentMessages[] = $sentMessages;
+        $this->messageUsers[] = $messageUsers;
 
         return $this;
     }
 
     /**
-     * Remove sentMessages
+     * Remove messageUsers
      *
-     * @param \AppBundle\Entity\Message $sentMessages
+     * @param \AppBundle\Entity\MessageUser $messageUsers
      */
-    public function removeSentMessage(\AppBundle\Entity\Message $sentMessages)
+    public function removeMessageUser(\AppBundle\Entity\MessageUser $messageUsers)
     {
-        $this->sentMessages->removeElement($sentMessages);
+        $this->messageUsers->removeElement($messageUsers);
     }
 
     /**
-     * Get sentMessages
+     * Get messageUsers
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSentMessages()
+    public function getMessageUsers()
     {
-        return $this->sentMessages;
+        return $this->messageUsers;
     }
 
 }

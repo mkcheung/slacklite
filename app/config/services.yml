@@ -1,9 +1,33 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/service_container.html
-parameters:
-    #parameter_name: value
-
 services:
-    #service_name:
-    #    class: AppBundle\Directory\ClassName
-    #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
+    repository.channel:
+        class: Doctrine\Orm\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Channel
+    repository.user:
+        class: Doctrine\Orm\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\MessageUser
+    repository.message:
+        class: Doctrine\Orm\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Message
+    app.channel_service:
+        class: AppBundle\Service\ChannelService
+        arguments: ['@doctrine.orm.entity_manager', "@repository.channel", "@repository.user"]
+    app.user_service:
+        class: AppBundle\Service\UserService
+        arguments: ['@doctrine.orm.entity_manager', "@repository.user"]
+    app.message_service:
+        class: AppBundle\Service\MessageService
+        arguments: ['@doctrine.orm.entity_manager', "@repository.message", "@repository.user", "@repository.channel"]
+    
+    app.form.registration:
+        class: AppBundle\Forms\Users\RegistrationFormType
+        tags:
+            - { name: form.type }
+    jwt_token_authenticator:
+        class: AppBundle\Security\JwtTokenAuthenticator
+        autowire: true

@@ -8,23 +8,21 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="message", indexes={
- *     @ORM\Index(name="messageToUser", columns={"user_id"})
- * })
+ * @ORM\Table(name="message")
  */
 class Message {
 
     /**
      * @ORM\Id()
      * @ORM\Column(name="message_id", type = "integer")
-     * @ORM\GeneratedValue(strategy = "AUTO")
-     * @var int
+     * @ORM\GeneratedValue(strategy = "IDENTITY")
+     * @var integer
      */
-    protected $id;
+    protected $message_id;
 
     /**
      * @var string
@@ -33,37 +31,39 @@ class Message {
     protected $message;
 
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(name="createdAt", type="datetime", nullable=false)
      */
     protected $createdAt;
 
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(name="modifiedAt", type="datetime", nullable=false)
      */
     protected $modifiedAt;
 
-
     /**
-     * @var user
-     * @ORM\ManyToOne(targetEntity="MessageUser")
-     * @ORM\JoinColumn(name="created_by_id", referencedColumnName="user_id")
-     */
-    protected $createdBy;
-
-    /**
-     * @var user
-     * @ORM\ManyToOne(targetEntity="MessageUser", inversedBy="messages")
+     * @var MessageUser
+     * @ORM\ManyToOne(targetEntity="MessageUser", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      */
-    protected $user;
+    protected $messageUser;
 
-    public function __construct($message, $createdBy, $directedToUser='') {
-        $this->message = $message;
-        $this->createdBy = $createdBy;
-        $this->user = (!empty($directedToUser)) ? $directedToUser : null;
+    /**
+     * @var Channel
+     * @ORM\ManyToOne(targetEntity="Channel", inversedBy="messages")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="channel_id")
+     */
+    protected $channel;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="Channel", mappedBy="messageUsers")
+     */
+    protected $channels;
+
+    public function __construct($message=null, $createdBy=null, $directedToUser='') {
+        $this->messageUsers     = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->modifiedAt = new \DateTime();
     }
@@ -86,7 +86,7 @@ class Message {
      * @return int
      */
     public function getId() {
-        return $this->id;
+        return $this->message_id;
     }
 
     public function getCreatedAt() {
@@ -125,48 +125,48 @@ class Message {
     }
 
     /**
-     * Set createdBy
-     *
-     * @param \AppBundle\Entity\MessageUser $createdBy
-     * @return Message
-     */
-    public function setCreatedBy(\AppBundle\Entity\MessageUser $createdBy = null)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return \AppBundle\Entity\MessageUser
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
      * Set user
      *
-     * @param \AppBundle\Entity\MessageUser $user
+     * @param \AppBundle\Entity\MessageUser $messageUser
      * @return Message
      */
-    public function setUser(\AppBundle\Entity\MessageUser $user = null)
+    public function setUser(\AppBundle\Entity\MessageUser $messageUser = null)
     {
-        $this->user = $user;
+        $this->messageUser = $messageUser;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get messageUser
      *
      * @return \AppBundle\Entity\MessageUser
      */
     public function getUser()
     {
-        return $this->user;
+        return $this->messageUser;
+    }
+
+    /**
+     * Set channel
+     *
+     * @param \AppBundle\Entity\Channel $channel
+     * @return Channel
+     */
+    public function setChannel(\AppBundle\Entity\Channel $channel = null)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Get channel
+     *
+     * @return \AppBundle\Entity\Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
     }
 }

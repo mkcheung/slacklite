@@ -1,0 +1,36 @@
+homepage:
+    path: /
+    defaults: { _controller: AppBundle:Default:index}
+
+channel_index:
+    path: /channels/
+    defaults: { _controller: AppBundle:Channel:index}
+    methods: [GET]
+
+channel_create:
+    path: /channels/create
+    defaults: { _controller: AppBundle:Channel:create}
+    methods: [POST]
+
+user_index:
+    path: /users/
+    defaults: { _controller: AppBundle:User:index}
+    methods: [GET]
+user_create:
+    path: /users/create
+    defaults: { _controller: AppBundle:User:create}
+    methods: [POST]
+
+message_index:
+    path: /messages/
+    defaults: { _controller: AppBundle:Message:index}
+    methods: [GET]
+message_create:
+    path: /messages/create
+    defaults: { _controller: AppBundle:Message:create}
+    methods: [POST]
+
+token_create:
+    path: /token/create
+    defaults: { _controller: AppBundle:Token:create}
+    methods: [POST]

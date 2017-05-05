@@ -1,0 +1,27 @@
+{% extends 'AppBundle::general_setup.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h1>
+            {{ title }}
+        </h1>
+        <div class="row">
+            <div class="col">
+
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+
+                {{ form_end(form) }}
+            </div>
+
+            <div class="col">
+                <h3>
+                    Navigator:
+                </h3>
+                <a href="/">Back To Index:</a>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
