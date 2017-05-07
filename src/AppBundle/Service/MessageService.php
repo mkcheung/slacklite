@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -38,6 +39,26 @@ class MessageService
     public function getMessages()
     {
         return $this->messageRepo->findAll();
+    }
+
+    public function getChannelMessages(Request $request)
+    {
+        $channelData = json_decode($request->getContent(), true);
+
+        $channelMessages = $this->messageRepo->findBy(['channel' => $channelData['channel_id']], ['createdAt' => 'ASC']);
+
+        foreach($channelMessages as $message){
+            $sender = $message->getUser();
+            $data['messages'][] = [
+               'sender' => $sender->getFirstName().' '.$sender->getLastName(),
+               'message' => $message->getMessage(),
+               'created_at' => $message->getCreatedAt()
+            ];
+        }
+
+        $response = new JsonResponse($data, 200);
+
+        return $response;
     }
 
     public function createMessage(Request $request)
