@@ -26,12 +26,17 @@ class Channel {
      */
     protected $channel_id;
 
-
     /**
      * @var \string
      * @ORM\Column(name="channelName", type="string", nullable=false)
      */
     protected $channelName;
+
+    /**
+     * @var \boolean
+     * @ORM\Column(name="singular", type="boolean", nullable=false, options={"default" : true})
+     */
+    protected $singular = true;
 
     /**
      * @var ArrayCollection
@@ -95,6 +100,18 @@ class Channel {
 
     public function setChannelName($channelName) {
         $this->channelName = $channelName;
+    }
+    
+    /**
+     *
+     * @return boolean
+     */
+    public function getSingular() {
+        return $this->singular;
+    }
+
+    public function setSingular($singular) {
+        $this->singular = $singular;
     }
 
     /**

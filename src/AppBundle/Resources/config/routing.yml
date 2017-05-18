@@ -7,10 +7,11 @@ channel_index:
     defaults: { _controller: AppBundle:Channel:index}
     methods: [GET]
 
-channel_create:
-    path: /channels/create
-    defaults: { _controller: AppBundle:Channel:create}
-    methods: [POST]
+channel_get:
+    path: /channels/getChannel
+    defaults: { _controller: AppBundle:Channel:getChannel}
+    methods: [GET]
+
 channel_create:
     path: /channels/create
     defaults: { _controller: AppBundle:Channel:create}
