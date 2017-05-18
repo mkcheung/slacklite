@@ -36,6 +36,7 @@ class TokenController extends Controller {
 		$userToken = $this->get('lexik_jwt_authentication.encoder')
 			->encode(
 				[
+					'user_id' => $user->getId(),
 					'username' => $data['username'],
 					'roles' => $user->getRoles()
 				]
