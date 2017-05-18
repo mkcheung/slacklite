@@ -32,6 +32,44 @@ class ChannelService
         $this->userRepo = $userRepository;
     }
 
+    public function getChannel(Request $request)
+    {
+        $channelData = $request->query->all();
+
+        $channelUsers = $this->userRepo->findBy(['user_id' => explode(',',$channelData['message_user_ids']) ]);
+        $queryText  = "SELECT c FROM AppBundle:Channel c ";
+        $queryText .= "WHERE c.singular = :singularOrNot ";
+
+        foreach($channelUsers as $channelUser){
+            $i = 0;
+            $queryText .= "AND :members$i MEMBER OF c.messageUsers ";
+            $i++;
+        }
+
+        $query = $this->em->createQuery($queryText);
+
+        for($j=0; $j < $i ; $j++){
+            $query->setParameter("members$j", $channelUsers[$j]);
+        }
+        $query->setParameter("singularOrNot", $channelData['singular']);
+        
+        $channel = $query->getResult();
+
+        $channelUsers = $channel[0]->getMessageUsers();
+
+        foreach($channelUsers as $channelUser){
+            $userIds[] = $channelUser->getId();
+        } 
+
+        $data['channel'][$channel[0]->getId()] = [
+            'channelName' => $channel[0]->getChannelName(),
+            'singular' => $channel[0]->getSingular(),
+            'channelUserIds' => $userIds
+        ];
+
+        return $data;
+    }
+
     public function getChannels()
     {
         return $this->channelRepo->findAll();

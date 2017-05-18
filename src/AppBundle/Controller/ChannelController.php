@@ -34,10 +34,18 @@ class ChannelController extends Controller
 
     public function createAction(Request $request){
 
-    	$channelService = $this->get('app.channel_service');
-    	$channel = $channelService->createChannel($request);
+        $channelService = $this->get('app.channel_service');
+        $channel = $channelService->createChannel($request);
 
-    	return new Response('Channel '.$channel->getChannelName().' created!', 201);
+        return new Response('Channel '.$channel->getChannelName().' created!', 201);
+    }
+
+    public function getChannelAction(Request $request){
+
+        $channelService = $this->get('app.channel_service');
+        $channelData = $channelService->getChannel($request);
+
+        return new JsonResponse($channelData, 200);
     }
 
 }

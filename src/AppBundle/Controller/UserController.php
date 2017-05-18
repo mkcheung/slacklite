@@ -31,7 +31,7 @@ class UserController extends Controller
 
 
         foreach($users as $user){
-            $data['users'][] = [
+            $data['users'][$user->getId()] = [
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail()
             ];
