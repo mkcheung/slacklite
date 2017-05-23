@@ -64,8 +64,7 @@ class MessageService
     public function createMessage(Request $request)
     {
 
-        $messageData = json_decode($request->getContent(), true);
-
+        $messageData = $request->request->all();
         $message = new Message();
         $user = $this->userRepo->findOneBy(['user_id' => $messageData['user_id']]);
 
