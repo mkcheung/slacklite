@@ -59,9 +59,13 @@ class MessageController extends Controller
     {
 
         $messageServices = $this->get('app.message_service');
-        $message = $messageServices->createMessage($request);
+        $response = $messageServices->createMessage($request);
 
-        return new Response('Message created!', 201);
+        if(empty($response)){
+            throw $this->createNotFoundException('Could not create/send message.');
+        }
+
+        return json_encode($response);
     }
 
 }

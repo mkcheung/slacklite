@@ -8,6 +8,8 @@ use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Chat implements MessageComponentInterface {
 
@@ -26,19 +28,6 @@ class Chat implements MessageComponentInterface {
 
         echo "New connection! ({$conn->resourceId})\n";
     }
-
-    // public function onMessage(ConnectionInterface $from, $msg) {
-    //     $numRecv = count($this->clients) - 1;
-    //     echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
-    //         , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
-
-    //     foreach ($this->clients as $client) {
-    //         if ($from !== $client) {
-    //             // The sender is not the receiver, send to each client connected
-    //             $client->send($msg);
-    //         }
-    //     }
-    // }
 
     public function onMessage(ConnectionInterface $from, $msg) {
 
@@ -70,18 +59,17 @@ class Chat implements MessageComponentInterface {
 
         $message = $messageService->createMessage($request);
 
-        $all_connections = $this->connections;
-        foreach($all_connections as $key => $conn){
-            if($conn === $from){
-                $this->connections[$index_connection] = $from;
-                $from->send('..:: Connected as '.$index_connection.'  ::..');
-                unset($this->connections[$key]);
-                break;
-            } else {
-                continue;
-            }
+        $numRecv = count($this->clients) - 1;
+        echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
+            , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
+        foreach ($this->clients as $client) {
+            // if ($from !== $client) {
+            if ($from === $client) {
+                $client->send($message);
+            }
         }
+        return $message;
     }
 
     public function onClose(ConnectionInterface $conn) {

@@ -84,6 +84,15 @@ class MessageService
         $message->setChannel($channel);
         $this->em->persist($message);
         $this->em->flush();
-        return $message;
+
+        $data['messages'][] = [
+            'message_id' => $message->getId(),
+            'sender' => $user->getFirstName().' '.$user->getLastName(),
+            'message' => $message->getMessage(),
+            'created_at' => $message->getCreatedAt()
+        ];
+
+
+        return json_encode($data);
     }
 }
