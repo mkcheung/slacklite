@@ -19,6 +19,7 @@
     "require": {
         "php": ">=5.3.9",
         "cboden/ratchet": "^0.3.6",
+        "react/zmq": "0.2.*|0.3.*",
         "doctrine/doctrine-bundle": "~1.4",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "doctrine/orm": "^2.4.8",
