@@ -10,18 +10,58 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use React\EventLoop;
+use React\EventLoop\StreamSelectLoop;
+
 
 class Chat implements WampServerInterface {
 
     protected $accessedChannels = [];
 
-    public function onSubscribe(ConnectionInterface $conn, $topic) {
-        $this->accessedChannels[$topic->getId()] = $topic;
+    /**
+     * @var \React\EventLoop\LoopInterface
+     */
+    private $loop;
+
+    /**
+     * @var array List of connected clients
+     */
+    private $clients;
+
+    /**
+     * Pass in the react event loop here
+     */
+    public function __construct(StreamSelectLoop $loop)
+    {
+        $this->loop = $loop;
+    }
+
+    public function onSubscribe(ConnectionInterface $conn, $subscription) {
+        
+        echo 'inside onsubscribe';
+
+        // This is the JSON passed in from your JavaScript
+        // Obviously you need to validate it's JSON and expected data etc...
+        $data = json_decode($subscription)->getId();
+
+        // Validate the users id and token together against the db values
+
+        // Now, let's subscribe this user only
+        // 5 = the interval, in seconds
+        $timer = $this->loop->addPeriodicTimer(5, function() use ($subscription) {
+            $data = "whatever data you want to broadcast";
+            return $subscription->broadcast(json_encode($data));
+        });
+
+        // Store the timer against that user's connection resource Id
+        $this->clients[$conn->resourceId]['timer'] = $timer;
     }
     public function onUnSubscribe(ConnectionInterface $conn, $topic) {
     }
     public function onOpen(ConnectionInterface $conn) {
         echo "New connection! ({$conn->resourceId})\n";
+        $this->clients[$conn->resourceId]['conn'] = $conn;
+        print_r(array_keys($this->clients)); // TODO: debugging statement 
     }
     public function onClose(ConnectionInterface $conn) {
     }

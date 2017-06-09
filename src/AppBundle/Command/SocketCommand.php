@@ -41,7 +41,7 @@ class SocketCommand extends ContainerAwareCommand
     {
 
         $loop   = Factory::create();
-        $pusher = new Chat();
+        $pusher = new Chat($loop);
 
         // Listen for the web server to make a ZeroMQ push after an ajax request
         $context = new Context($loop);
