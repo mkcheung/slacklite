@@ -16,11 +16,9 @@ use React\ZMQ\Context;
 use React\Socket\Server as SocketServer;
 use ZMQ;
 
-// Include ratchet libs
-use Ratchet\Server\IoServer as RatchetIoServer;
-use Ratchet\Http\HttpServer as RatchetHttpServer;
-use Ratchet\WebSocket\WsServer as RatchetWsServer;
-use Ratchet\Wamp\WampServer as RatchetWampServer;
+
+use Thruway\Peer\Router;
+use Thruway\Transport\RatchetTransportProvider;
 
 // Change the namespace according to your bundle
 use AppBundle\Sockets\Chat;
@@ -40,36 +38,16 @@ class SocketCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $loop   = Factory::create();
-        $pusher = new Chat($loop);
 
-        // Listen for the web server to make a ZeroMQ push after an ajax request
-        $context = new Context($loop);
-        $pull = $context->getSocket(ZMQ::SOCKET_PULL);
-        $pull->bind('tcp://127.0.0.1:5555'); // Binding to 127.0.0.1 means the only client that can connect is itself
-        $pull->on('message', array($pusher, 'onChannelAccess'));
+        // $router = new Router();
+        // $transportProvider = new RatchetTransportProvider("127.0.0.1", 8090);
+        // $router->addTransportProvider($transportProvider);
+        // $router->start();
+        $router = new Router();
+        $realm = "realm1";
 
-        $output->writeln([
-            'Chat socket',// A line
-            '============',// Another line
-            'Starting chat, open your browser.',// Empty line
-        ]);
-
-
-        // Set up our WebSocket server for clients wanting real-time updates
-        $webSock = new SocketServer($loop);
-        $webSock->listen(8090, '0.0.0.0'); // Binding to 0.0.0.0 means remotes can connect
-        $webServer = new RatchetIoServer(
-            new RatchetHttpServer(
-                new RatchetWsServer(
-                    new RatchetWampServer(
-                        $pusher
-                    )
-                )
-            ),
-            $webSock
-        );
-
-        $loop->run();
+        $router->addInternalClient(new Chat($realm, $router->getLoop()));
+        $router->addTransportProvider(new RatchetTransportProvider("127.0.0.1", 8090));
+        $router->start();
     }
 }

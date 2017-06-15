@@ -104,4 +104,17 @@ fos_user:
         sender_name: "%mailer_user%"
     registration:
         form:
-            type: AppBundle\Forms\Users\RegistrationFormType
+            type: AppBundle\Forms\Users\RegistrationFormType#app/config/config.yml
+
+voryx_thruway:
+    realm: 'realm1'
+    url: 'ws://127.0.0.1:8090' #The url that the clients will use to connect to the router
+    router:
+        ip: '127.0.0.1'  # the ip that the router should start on
+        port: '8080'  # public facing port.  If authentication is enabled, this port will be protected
+        trusted_port: '8090' # Bypasses all authentication.  Use this for trusted clients.
+#        authentication: false # true will load the AuthenticationManager
+    locations:
+        bundles: ["AppBundle"]
+#        files:
+#            - "Acme\\DemoBundle\\Controller\\DemoController"

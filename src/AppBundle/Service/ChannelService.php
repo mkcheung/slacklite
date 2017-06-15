@@ -61,8 +61,11 @@ class ChannelService
             $userIds[] = $channelUser->getId();
         } 
 
+        $channelTopic = str_replace(' ', '.', 'com.'.strtolower($channel[0]->getChannelName()));
+
         $data['channel'][$channel[0]->getId()] = [
             'channelName' => $channel[0]->getChannelName(),
+            'channelTopic' => $channelTopic,
             'singular' => $channel[0]->getSingular(),
             'channelUserIds' => $userIds
         ];
