@@ -35,37 +35,37 @@ class Chat extends Client
 {
     protected $sessions = [];
 
-    // public function onSessionStart($session, $transport)
-    // {
+    public function onSessionStart($session, $transport)
+    {
 
-    //     // 1) subscribe to a topic
-    //     $onevent = function ($args) {
-    //         echo "Event {$args[0]}\n";
-    //     };
-    //     $session->subscribe('com.singular.channel', $onevent);
-    //     // 2) publish an event
-    //     $session->publish('com.singular.channel', ['Hello, world from PHP!!!'], [], ["acknowledge" => true])->then(
-    //         function () {
-    //             echo "Publish Acknowledged!\n";
-    //         },
-    //         function ($error) {
-    //             // publish failed
-    //             echo "Publish Error {$error}\n";
-    //         }
-    //     );
-    // }
+        // 1) subscribe to a topic
+        $onevent = function ($args) {
+            echo "Event {$args[0]}\n";
+        };
+        $session->subscribe('com.singular.channel', $onevent);
+        // 2) publish an event
+        $session->publish('com.singular.channel', ['Hello, world from PHP!!!'], [], ["acknowledge" => true])->then(
+            function () {
+                echo "Publish Acknowledged!\n";
+            },
+            function ($error) {
+                // publish failed
+                echo "Publish Error {$error}\n";
+            }
+        );
+    }
 
 
-    // public function onMessage(TransportInterface $transport, Message $msg) {
-    //     var_dump($msg);
-    //     if ($msg instanceof PublishMessage) {
-    //         if ($msg->getTopicName() == "mytopic") {
-    //             // mangle the message in here
-    //         }
-    //     }
+    public function onMessage(TransportInterface $transport, Message $msg) {
+        var_dump($msg);
+        if ($msg instanceof PublishMessage) {
+            if ($msg->getTopicName() == "mytopic") {
+                // mangle the message in here
+            }
+        }
 
-    //     parent::onMessage($transport, $msg);
-    // }
+        parent::onMessage($transport, $msg);
+    }
 }
 
 //     /**
